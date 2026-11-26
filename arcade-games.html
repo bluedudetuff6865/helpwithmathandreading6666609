@@ -6,149 +6,74 @@
   <meta name="theme-color" content="#090b14">
   <title>Mini Arcade</title>
   <style>
-    :root { color-scheme:dark; --bg:#090b14; --panel:#171a2b; --muted:#b7bbcc; --accent:#7c5cff; --line:#30344a }
-    * { box-sizing:border-box }
-    body { margin:0; background:var(--bg); color:#f7f7fb; font-family:system-ui,sans-serif }
-    header { min-height:64px; display:flex; align-items:center; gap:18px; padding:10px max(16px,calc((100vw - 1100px)/2)); border-bottom:1px solid #24283b }
-    header a { color:#c9c4ff; text-decoration:none; font-weight:750 }
-    header h1 { margin:0; font-size:clamp(20px,4vw,28px) }
-    main { width:min(100% - 24px,1000px); margin:0 auto; padding:24px 0 50px }
-    .intro { color:var(--muted); margin:0 0 18px }
-    .tabs { display:flex; gap:8px; overflow:auto; padding:4px 2px 14px; scrollbar-width:thin }
-    button { font:inherit; touch-action:manipulation }
-    .tab,.control,.primary { border:1px solid var(--line); border-radius:10px; padding:11px 15px; color:#f7f7fb; background:#171a2b; cursor:pointer; font-weight:700 }
-    .tab { flex:0 0 auto }.tab[aria-selected="true"],.primary { background:var(--accent); border-color:var(--accent) }
-    .panel { padding:clamp(16px,4vw,28px); border:1px solid #252a40; border-radius:16px; background:var(--panel); min-height:390px }
-    .panel h2 { margin:0 0 8px }.help,.status { color:var(--muted) }.status { min-height:26px; font-weight:700 }
-    .actions { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:14px 0 }
-    .control:active,.primary:active,.tab:active { transform:scale(.98) }
-    .game-area { display:grid; place-items:center; margin:14px auto }
-    canvas { display:block; width:min( min(80vw,360px),100%); height:auto; border:2px solid #454b69; border-radius:8px; background:#080d12; touch-action:none }
-    .dpad { display:grid; grid-template-columns:repeat(3,56px); grid-template-rows:repeat(2,48px); gap:6px; justify-content:center; margin:10px auto }
-    .dpad button { border:1px solid var(--line); border-radius:10px; background:#252a40; color:white; font-size:22px; touch-action:manipulation }
-    .dpad .up { grid-column:2 }.dpad .left { grid-column:1;grid-row:2 }.dpad .down { grid-column:2;grid-row:2 }.dpad .right { grid-column:3;grid-row:2 }
-    .ttt { display:grid; grid-template-columns:repeat(3,min(24vw,86px)); gap:8px }
-    .ttt button { width:min(24vw,86px); height:min(24vw,86px); border:1px solid #454b69; border-radius:12px; background:#0d1020; color:#fff; font-size:clamp(30px,8vw,48px); font-weight:800; cursor:pointer }
-    .memory { display:grid; grid-template-columns:repeat(4,min(19vw,72px)); gap:8px; justify-content:center }
-    .memory button { width:min(19vw,72px); height:min(19vw,72px); border:1px solid #454b69; border-radius:12px; background:#282d46; color:white; font-size:clamp(24px,7vw,36px); cursor:pointer }
-    .memory button.revealed,.memory button.matched { background:#433383 }
-    .moles { display:grid; grid-template-columns:repeat(3,min(23vw,90px)); gap:10px }
-    .moles button { width:min(23vw,90px); height:min(23vw,90px); border:1px solid #454b69; border-radius:50%; background:#262b42; font-size:35px; cursor:pointer }
-    input[type=number] { width:130px; min-height:46px; border:1px solid #454b69; border-radius:10px; background:#0d1020; color:white; padding:8px 12px; font:inherit }
-    [hidden] { display:none !important }
-    @media (max-width:500px) { header { gap:12px } main { padding-top:16px } .panel { min-height:420px } }
+    :root{color-scheme:dark;--bg:#090b14;--panel:#171a2b;--muted:#b7bbcc;--accent:#7c5cff;--line:#30344a}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f7fb;font-family:system-ui,sans-serif}header{min-height:64px;display:flex;align-items:center;gap:18px;padding:10px max(16px,calc((100vw - 1100px)/2));border-bottom:1px solid #24283b}header a{color:#c9c4ff;text-decoration:none;font-weight:750}header h1{margin:0;font-size:clamp(20px,4vw,28px)}main{width:min(100% - 24px,1000px);margin:0 auto;padding:24px 0 50px}.intro,.help{color:var(--muted)}.tabs{display:flex;gap:8px;overflow:auto;padding:4px 2px 14px}button{font:inherit;touch-action:manipulation}.tab,.control,.primary{border:1px solid var(--line);border-radius:10px;padding:11px 15px;color:#f7f7fb;background:#171a2b;cursor:pointer;font-weight:700}.tab{flex:0 0 auto}.tab[aria-selected=true],.primary{background:var(--accent);border-color:var(--accent)}.panel{padding:clamp(16px,4vw,28px);border:1px solid #252a40;border-radius:16px;background:var(--panel);min-height:390px}.panel h2{margin:0 0 8px}.status{min-height:26px;color:var(--muted);font-weight:700}.actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;margin:14px 0}.game-area{display:grid;place-items:center;margin:14px auto}canvas{display:block;width:min(80vw,360px);height:auto;border:2px solid #454b69;border-radius:8px;background:#080d12;touch-action:none}.dpad{display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(2,48px);gap:6px;justify-content:center;margin:10px auto}.dpad button,.touch-controls button{border:1px solid var(--line);border-radius:10px;background:#252a40;color:white;font-size:22px;min-height:46px}.dpad .up{grid-column:2}.dpad .left{grid-column:1;grid-row:2}.dpad .down{grid-column:2;grid-row:2}.dpad .right{grid-column:3;grid-row:2}.ttt{display:grid;grid-template-columns:repeat(3,min(24vw,86px));gap:8px}.ttt button{width:min(24vw,86px);height:min(24vw,86px);border:1px solid #454b69;border-radius:12px;background:#0d1020;color:#fff;font-size:clamp(30px,8vw,48px);font-weight:800}.memory{display:grid;grid-template-columns:repeat(4,min(19vw,72px));gap:8px;justify-content:center}.memory button{width:min(19vw,72px);height:min(19vw,72px);border:1px solid #454b69;border-radius:12px;background:#282d46;color:white;font-size:clamp(24px,7vw,36px)}.memory button.revealed,.memory button.matched{background:#433383}.moles{display:grid;grid-template-columns:repeat(3,min(23vw,90px));gap:10px}.moles button{width:min(23vw,90px);height:min(23vw,90px);border:1px solid #454b69;border-radius:50%;background:#262b42;font-size:35px}.touch-controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.touch-controls button{min-width:52px;padding:8px 14px}.touch-controls .wide{min-width:100px;font-size:15px}input[type=number]{width:130px;min-height:46px;border:1px solid #454b69;border-radius:10px;background:#0d1020;color:white;padding:8px 12px;font:inherit}[hidden]{display:none!important}@media(max-width:500px){header{gap:12px}main{padding-top:16px}.panel{min-height:420px}}
   </style>
 </head>
 <body>
   <header><a href="index.html">← Arcade</a><h1>Mini Arcade</h1></header>
   <main>
-    <p class="intro">Six quick games that run right here—no downloads or sign-in required. Tap-friendly on phones and tablets.</p>
+    <p class="intro">Seven games that run right here—no downloads or sign-in required. Tap-friendly on phones and tablets.</p>
     <div class="tabs" role="tablist" aria-label="Choose a game">
-      <button class="tab" role="tab" aria-selected="true" data-panel="snake">🐍 Snake</button>
-      <button class="tab" role="tab" aria-selected="false" data-panel="tic">⭕ Tic-Tac-Toe</button>
-      <button class="tab" role="tab" aria-selected="false" data-panel="memory">🧠 Memory</button>
-      <button class="tab" role="tab" aria-selected="false" data-panel="mole">🐹 Whack-a-Mole</button>
-      <button class="tab" role="tab" aria-selected="false" data-panel="reaction">⚡ Reaction</button>
-      <button class="tab" role="tab" aria-selected="false" data-panel="guess">🔢 Number Guess</button>
+      <button class="tab" role="tab" aria-selected="true" data-panel="snake">🐍 Snake</button><button class="tab" role="tab" aria-selected="false" data-panel="tic">⭕ Tic-Tac-Toe</button><button class="tab" role="tab" aria-selected="false" data-panel="memory">🧠 Memory</button><button class="tab" role="tab" aria-selected="false" data-panel="mole">🐹 Whack-a-Mole</button><button class="tab" role="tab" aria-selected="false" data-panel="reaction">⚡ Reaction</button><button class="tab" role="tab" aria-selected="false" data-panel="guess">🔢 Number Guess</button><button class="tab" role="tab" aria-selected="false" data-panel="tetris">🧱 Tetris</button>
     </div>
-
-    <section class="panel" id="snake" role="tabpanel">
-      <h2>Snake</h2><p class="help">Eat the red food and don't hit the wall or yourself. Use arrow keys or tap the controls.</p>
-      <div class="status" id="snakeStatus" aria-live="polite">Tap Start to play.</div>
-      <div class="game-area"><canvas id="snakeCanvas" width="320" height="320" aria-label="Snake game board"></canvas></div>
-      <div class="actions" style="justify-content:center"><button class="primary" id="snakeStart">Start / Restart</button></div>
-      <div class="dpad" aria-label="Snake touch controls"><button class="up" data-dir="up" aria-label="Up">▲</button><button class="left" data-dir="left" aria-label="Left">◀</button><button class="down" data-dir="down" aria-label="Down">▼</button><button class="right" data-dir="right" aria-label="Right">▶</button></div>
-    </section>
-
-    <section class="panel" id="tic" role="tabpanel" hidden>
-      <h2>Tic-Tac-Toe</h2><p class="help">Take turns with a friend. First to get three in a row wins.</p><div class="status" id="ticStatus" aria-live="polite">X goes first.</div>
-      <div class="game-area"><div class="ttt" id="ticBoard" aria-label="Tic-Tac-Toe board"></div></div><div class="actions"><button class="primary" id="ticReset">New game</button></div>
-    </section>
-
-    <section class="panel" id="memory" role="tabpanel" hidden>
-      <h2>Memory Match</h2><p class="help">Find all eight matching pairs.</p><div class="status" id="memoryStatus" aria-live="polite">Moves: 0</div>
-      <div class="game-area"><div class="memory" id="memoryBoard"></div></div><div class="actions"><button class="primary" id="memoryReset">Shuffle cards</button></div>
-    </section>
-
-    <section class="panel" id="mole" role="tabpanel" hidden>
-      <h2>Whack-a-Mole</h2><p class="help">Tap the mole as many times as you can before time runs out.</p><div class="status" id="moleStatus" aria-live="polite">Ready? Tap Start!</div>
-      <div class="game-area"><div class="moles" id="moleBoard"></div></div><div class="actions"><button class="primary" id="moleStart">Start 20-second round</button></div>
-    </section>
-
-    <section class="panel" id="reaction" role="tabpanel" hidden>
-      <h2>Reaction Test</h2><p class="help">Tap the button when it turns green. Don't tap early!</p><div class="status" id="reactionStatus" aria-live="polite">Ready when you are.</div>
-      <div class="game-area"><button class="primary" id="reactionButton" style="min-width:min(80vw,280px);min-height:110px;font-size:22px">Start test</button></div>
-    </section>
-
-    <section class="panel" id="guess" role="tabpanel" hidden>
-      <h2>Number Guess</h2><p class="help">I'm thinking of a number from 1 to 100. Can you guess it?</p><div class="status" id="guessStatus" aria-live="polite">Enter a number to begin.</div>
-      <form class="actions" id="guessForm"><input id="guessInput" type="number" min="1" max="100" inputmode="numeric" aria-label="Your guess" required><button class="primary" type="submit">Guess</button><button class="control" id="guessReset" type="button">New number</button></form>
-    </section>
+    <section class="panel" id="snake" role="tabpanel"><h2>Snake</h2><p class="help">Eat the red food and avoid the walls. Use arrow keys or the touch controls.</p><div class="status" id="snakeStatus" aria-live="polite">Tap Start to play.</div><div class="game-area"><canvas id="snakeCanvas" width="320" height="320" aria-label="Snake board"></canvas></div><div class="actions"><button class="primary" id="snakeStart">Start / Restart</button></div><div class="dpad" aria-label="Snake touch controls"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="down" data-dir="down">▼</button><button class="right" data-dir="right">▶</button></div></section>
+    <section class="panel" id="tic" role="tabpanel" hidden><h2>Tic-Tac-Toe</h2><p class="help">Take turns with a friend. First to get three in a row wins.</p><div class="status" id="ticStatus" aria-live="polite">X goes first.</div><div class="game-area"><div class="ttt" id="ticBoard"></div></div><div class="actions"><button class="primary" id="ticReset">New game</button></div></section>
+    <section class="panel" id="memory" role="tabpanel" hidden><h2>Memory Match</h2><p class="help">Find all eight matching pairs.</p><div class="status" id="memoryStatus" aria-live="polite">Moves: 0</div><div class="game-area"><div class="memory" id="memoryBoard"></div></div><div class="actions"><button class="primary" id="memoryReset">Shuffle cards</button></div></section>
+    <section class="panel" id="mole" role="tabpanel" hidden><h2>Whack-a-Mole</h2><p class="help">Tap the mole as many times as you can before time runs out.</p><div class="status" id="moleStatus" aria-live="polite">Ready? Tap Start!</div><div class="game-area"><div class="moles" id="moleBoard"></div></div><div class="actions"><button class="primary" id="moleStart">Start 20-second round</button></div></section>
+    <section class="panel" id="reaction" role="tabpanel" hidden><h2>Reaction Test</h2><p class="help">Tap when the button turns green. Don't tap early!</p><div class="status" id="reactionStatus" aria-live="polite">Ready when you are.</div><div class="game-area"><button class="primary" id="reactionButton" style="min-width:min(80vw,280px);min-height:110px;font-size:22px">Start test</button></div></section>
+    <section class="panel" id="guess" role="tabpanel" hidden><h2>Number Guess</h2><p class="help">I'm thinking of a number from 1 to 100. Can you guess it?</p><div class="status" id="guessStatus" aria-live="polite">Enter a number to begin.</div><form class="actions" id="guessForm"><input id="guessInput" type="number" min="1" max="100" inputmode="numeric" aria-label="Your guess" required><button class="primary" type="submit">Guess</button><button class="control" id="guessReset" type="button">New number</button></form></section>
+    <section class="panel" id="tetris" role="tabpanel" hidden><h2>Tetris</h2><p class="help">Fill rows to clear them. Use arrow keys or tap the controls.</p><div class="status" id="tetrisStatus" aria-live="polite">Tap Start to play.</div><div class="game-area"><canvas id="tetrisCanvas" width="240" height="400" aria-label="Tetris board"></canvas></div><div class="actions"><button class="primary" id="tetrisStart">Start / Restart</button></div><div class="touch-controls" aria-label="Tetris touch controls"><button data-tetris="left" aria-label="Move left">◀</button><button data-tetris="rotate" aria-label="Rotate">⟳</button><button data-tetris="right" aria-label="Move right">▶</button><button data-tetris="down" aria-label="Move down">▼</button><button class="wide" data-tetris="drop">Drop</button></div></section>
   </main>
-
   <script>
-    const tabs = [...document.querySelectorAll('.tab')];
-    let activePanel = 'snake';
-    tabs.forEach(tab => tab.addEventListener('click', () => {
-      activePanel = tab.dataset.panel;
-      tabs.forEach(item => item.setAttribute('aria-selected', String(item === tab)));
-      document.querySelectorAll('.panel').forEach(panel => panel.hidden = panel.id !== activePanel);
-    }));
+    // Switch games without navigating away.
+    let activePanel='snake';
+    document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{activePanel=tab.dataset.panel;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',String(t===tab)));document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!==activePanel);}));
 
     // Snake
-    const canvas = document.getElementById('snakeCanvas');
-    const ctx = canvas.getContext('2d');
-    const snakeStatus = document.getElementById('snakeStatus');
-    let snake, food, direction, nextDirection, snakeLoop, snakeScore, snakeRunning = false;
-    function drawSnake() {
-      ctx.fillStyle = '#080d12'; ctx.fillRect(0, 0, 320, 320);
-      ctx.fillStyle = '#ff7185'; ctx.fillRect(food.x * 20 + 2, food.y * 20 + 2, 16, 16);
-      snake.forEach((part, i) => { ctx.fillStyle = i ? '#49c785' : '#a2f5c7'; ctx.fillRect(part.x * 20 + 1, part.y * 20 + 1, 18, 18); });
-    }
-    function placeFood() { do { food = { x:Math.floor(Math.random()*16), y:Math.floor(Math.random()*16) }; } while (snake.some(part => part.x===food.x && part.y===food.y)); }
-    function startSnake() { clearInterval(snakeLoop); snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}]; direction={x:1,y:0}; nextDirection=direction; snakeScore=0; snakeRunning=true; placeFood(); snakeStatus.textContent='Score: 0'; drawSnake(); snakeLoop=setInterval(stepSnake,140); }
-    function stepSnake() {
-      direction=nextDirection; const head={x:snake[0].x+direction.x,y:snake[0].y+direction.y};
-      if(head.x<0||head.x>=16||head.y<0||head.y>=16||snake.some(part=>part.x===head.x&&part.y===head.y)){ clearInterval(snakeLoop); snakeRunning=false; snakeStatus.textContent=`Game over! Score: ${snakeScore}. Tap Start to try again.`; return; }
-      snake.unshift(head);
-      if(head.x===food.x&&head.y===food.y){snakeScore++;placeFood();snakeStatus.textContent=`Score: ${snakeScore}`;}else snake.pop();
-      drawSnake();
-    }
-    function setDirection(name) { const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}}; const d=dirs[name]; if(d&&d.x!==-direction.x&&d.y!==-direction.y) nextDirection=d; }
-    document.getElementById('snakeStart').addEventListener('click',startSnake);
-    document.querySelectorAll('[data-dir]').forEach(button=>button.addEventListener('click',()=>setDirection(button.dataset.dir)));
-    document.addEventListener('keydown',event=>{if(activePanel!=='snake')return;const keys={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};if(keys[event.key]){event.preventDefault();setDirection(keys[event.key]);}});
-    drawSnake();
+    const snakeCanvas=document.getElementById('snakeCanvas'),snakeCtx=snakeCanvas.getContext('2d'),snakeStatus=document.getElementById('snakeStatus');let snake=[],food={x:10,y:10},snakeDir={x:1,y:0},snakeNext={x:1,y:0},snakeTimer=null,snakeScore=0;
+    function drawSnake(){snakeCtx.fillStyle='#080d12';snakeCtx.fillRect(0,0,320,320);snakeCtx.fillStyle='#ff7185';snakeCtx.fillRect(food.x*20+2,food.y*20+2,16,16);snake.forEach((p,i)=>{snakeCtx.fillStyle=i?'#49c785':'#a2f5c7';snakeCtx.fillRect(p.x*20+1,p.y*20+1,18,18);});}
+    function newFood(){do{food={x:Math.floor(Math.random()*16),y:Math.floor(Math.random()*16)}}while(snake.some(p=>p.x===food.x&&p.y===food.y));}
+    function startSnake(){clearInterval(snakeTimer);snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];snakeDir={x:1,y:0};snakeNext={x:1,y:0};snakeScore=0;newFood();snakeStatus.textContent='Score: 0';drawSnake();snakeTimer=setInterval(()=>{snakeDir=snakeNext;const head={x:snake[0].x+snakeDir.x,y:snake[0].y+snakeDir.y};if(head.x<0||head.x>=16||head.y<0||head.y>=16||snake.some(p=>p.x===head.x&&p.y===head.y)){clearInterval(snakeTimer);snakeStatus.textContent=`Game over! Score: ${snakeScore}.`;return;}snake.unshift(head);if(head.x===food.x&&head.y===food.y){snakeScore++;newFood();snakeStatus.textContent=`Score: ${snakeScore}`;}else snake.pop();drawSnake();},140);}
+    function snakeTurn(name){const d={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}}[name];if(d&&(d.x!==-snakeDir.x||d.y!==-snakeDir.y))snakeNext=d;}
+    document.getElementById('snakeStart').addEventListener('click',startSnake);document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>snakeTurn(b.dataset.dir)));drawSnake();
 
     // Tic-Tac-Toe
-    const ticBoard=document.getElementById('ticBoard'); const ticStatus=document.getElementById('ticStatus'); let ticState=Array(9).fill(''); let ticTurn='X'; let ticDone=false;
-    const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-    function renderTic(){ticBoard.replaceChildren();ticState.forEach((value,index)=>{const b=document.createElement('button');b.textContent=value;b.setAttribute('aria-label',`Square ${index+1}${value?`, ${value}`:''}`);b.addEventListener('click',()=>{if(value||ticDone)return;ticState[index]=ticTurn;const line=wins.find(group=>group.every(i=>ticState[i]===ticTurn));if(line){ticDone=true;ticStatus.textContent=`${ticTurn} wins!`; }else if(ticState.every(Boolean)){ticDone=true;ticStatus.textContent="It's a draw!";}else{ticTurn=ticTurn==='X'?'O':'X';ticStatus.textContent=`${ticTurn}'s turn.`;}renderTic();});ticBoard.append(b);});}
-    function resetTic(){ticState=Array(9).fill('');ticTurn='X';ticDone=false;ticStatus.textContent='X goes first.';renderTic();}
+    const ticBoard=document.getElementById('ticBoard'),ticStatus=document.getElementById('ticStatus');let ticCells=[],ticTurn='X',ticOver=false;const winLines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    function resetTic(){ticCells=Array(9).fill('');ticTurn='X';ticOver=false;ticStatus.textContent='X goes first.';ticBoard.replaceChildren();ticCells.forEach((_,i)=>{const cell=document.createElement('button');cell.type='button';cell.setAttribute('aria-label',`Square ${i+1}`);cell.addEventListener('click',()=>{if(ticOver||ticCells[i])return;ticCells[i]=ticTurn;cell.textContent=ticTurn;cell.setAttribute('aria-label',`Square ${i+1}, ${ticTurn}`);if(winLines.some(line=>line.every(n=>ticCells[n]===ticTurn))){ticOver=true;ticStatus.textContent=`${ticTurn} wins!`;return;}if(ticCells.every(Boolean)){ticOver=true;ticStatus.textContent="It's a draw!";return;}ticTurn=ticTurn==='X'?'O':'X';ticStatus.textContent=`${ticTurn}'s turn.`;});ticBoard.append(cell);});}
     document.getElementById('ticReset').addEventListener('click',resetTic);resetTic();
 
-    // Memory Match
-    const emojis=['🍓','🚀','🐸','⭐','🍕','🐙','🎈','🦄'];const memoryBoard=document.getElementById('memoryBoard');const memoryStatus=document.getElementById('memoryStatus');let memoryCards=[],flipped=[],matched=0,moves=0,memoryLocked=false;
-    function resetMemory(){memoryCards=[...emojis,...emojis].sort(()=>Math.random()-.5);flipped=[];matched=0;moves=0;memoryLocked=false;memoryStatus.textContent='Moves: 0';renderMemory();}
-    function renderMemory(){memoryBoard.replaceChildren();memoryCards.forEach((emoji,index)=>{const b=document.createElement('button');const show=flipped.includes(index)||b.dataset.matched==='true';b.textContent=show?emoji:'?';b.setAttribute('aria-label',show?emoji:'Hidden card');if(flipped.includes(index))b.classList.add('revealed');b.addEventListener('click',()=>{if(memoryLocked||flipped.includes(index)||b.classList.contains('matched'))return;flipped.push(index);b.textContent=emoji;b.classList.add('revealed');if(flipped.length===2){moves++;memoryStatus.textContent=`Moves: ${moves}`;const [a,c]=flipped;if(memoryCards[a]===memoryCards[c]){memoryBoard.children[a].classList.add('matched');memoryBoard.children[c].classList.add('matched');flipped=[];matched+=2;if(matched===memoryCards.length)memoryStatus.textContent=`You matched them all in ${moves} moves!`;}else{memoryLocked=true;setTimeout(()=>{flipped.forEach(i=>{memoryBoard.children[i].textContent='?';memoryBoard.children[i].classList.remove('revealed');});flipped=[];memoryLocked=false;},750);}}});memoryBoard.append(b);});}
+    // Memory: matched pairs are tracked independently from the displayed buttons.
+    const memoryBoard=document.getElementById('memoryBoard'),memoryStatus=document.getElementById('memoryStatus'),symbols=['🍓','🚀','🐸','⭐','🍕','🐙','🎈','🦄'];let cards=[],openCards=[],found=new Set(),moves=0,memoryBusy=false,memoryTimeout;
+    function resetMemory(){clearTimeout(memoryTimeout);cards=[...symbols,...symbols].sort(()=>Math.random()-.5);openCards=[];found=new Set();moves=0;memoryBusy=false;memoryStatus.textContent='Moves: 0';memoryBoard.replaceChildren();cards.forEach((symbol,i)=>{const card=document.createElement('button');card.type='button';card.textContent='?';card.setAttribute('aria-label','Hidden card');card.addEventListener('click',()=>{if(memoryBusy||found.has(i)||openCards.includes(i))return;card.textContent=symbol;card.classList.add('revealed');card.setAttribute('aria-label',symbol);openCards.push(i);if(openCards.length<2)return;moves++;memoryStatus.textContent=`Moves: ${moves}`;const [a,b]=openCards;if(cards[a]===cards[b]){found.add(a);found.add(b);memoryBoard.children[a].classList.add('matched');memoryBoard.children[b].classList.add('matched');openCards=[];if(found.size===cards.length)memoryStatus.textContent=`You matched all pairs in ${moves} moves!`;}else{memoryBusy=true;memoryTimeout=setTimeout(()=>{for(const n of openCards){const c=memoryBoard.children[n];if(c){c.textContent='?';c.classList.remove('revealed');c.setAttribute('aria-label','Hidden card');}}openCards=[];memoryBusy=false;},800);}});memoryBoard.append(card);});}
     document.getElementById('memoryReset').addEventListener('click',resetMemory);resetMemory();
 
     // Whack-a-Mole
-    const moleBoard=document.getElementById('moleBoard');const moleStatus=document.getElementById('moleStatus');let moleActive=-1,moleScore=0,moleTime=20,moleInterval,moleClock;
-    for(let i=0;i<9;i++){const b=document.createElement('button');b.setAttribute('aria-label',`Mole hole ${i+1}`);b.textContent='';b.addEventListener('click',()=>{if(i===moleActive){moleScore++;moleStatus.textContent=`Time: ${moleTime}s · Score: ${moleScore}`;showMole();}});moleBoard.append(b);}
-    function showMole(){moleActive=Math.floor(Math.random()*9);[...moleBoard.children].forEach((b,i)=>{b.textContent=i===moleActive?'🐹':'';b.setAttribute('aria-label',i===moleActive?'Mole! tap it':`Empty hole ${i+1}`);});}
-    function startMole(){clearInterval(moleInterval);clearInterval(moleClock);moleScore=0;moleTime=20;moleStatus.textContent='Time: 20s · Score: 0';showMole();moleInterval=setInterval(showMole,650);moleClock=setInterval(()=>{moleTime--;if(moleTime<=0){clearInterval(moleInterval);clearInterval(moleClock);moleActive=-1;[...moleBoard.children].forEach(b=>b.textContent='');moleStatus.textContent=`Time's up! Final score: ${moleScore}.`; }else moleStatus.textContent=`Time: ${moleTime}s · Score: ${moleScore}`;},1000);}
+    const moleBoard=document.getElementById('moleBoard'),moleStatus=document.getElementById('moleStatus');let moleIndex=-1,moleScore=0,moleTime=20,moleMoveTimer=null,moleClockTimer=null,molePlaying=false;
+    for(let i=0;i<9;i++){const hole=document.createElement('button');hole.type='button';hole.setAttribute('aria-label',`Hole ${i+1}`);hole.addEventListener('click',()=>{if(molePlaying&&i===moleIndex){moleScore++;moleStatus.textContent=`Time: ${moleTime}s · Score: ${moleScore}`;showMole();}});moleBoard.append(hole);}
+    function showMole(){moleIndex=Math.floor(Math.random()*9);[...moleBoard.children].forEach((b,i)=>{b.textContent=i===moleIndex?'🐹':'';b.setAttribute('aria-label',i===moleIndex?'Mole! tap it':`Empty hole ${i+1}`);});}
+    function startMole(){clearInterval(moleMoveTimer);clearInterval(moleClockTimer);molePlaying=true;moleScore=0;moleTime=20;moleStatus.textContent='Time: 20s · Score: 0';showMole();moleMoveTimer=setInterval(showMole,700);moleClockTimer=setInterval(()=>{moleTime--;if(moleTime<=0){clearInterval(moleMoveTimer);clearInterval(moleClockTimer);molePlaying=false;moleIndex=-1;[...moleBoard.children].forEach(b=>b.textContent='');moleStatus.textContent=`Time's up! Final score: ${moleScore}.`;}else moleStatus.textContent=`Time: ${moleTime}s · Score: ${moleScore}`;},1000);}
     document.getElementById('moleStart').addEventListener('click',startMole);
 
     // Reaction test
-    const reactionButton=document.getElementById('reactionButton');const reactionStatus=document.getElementById('reactionStatus');let reactionState='idle',reactionTimer,reactionStarted=0;
-    reactionButton.addEventListener('click',()=>{if(reactionState==='idle'||reactionState==='done'){reactionState='waiting';reactionButton.textContent='Wait for green…';reactionButton.style.background='#a64255';reactionStatus.textContent='Wait…';reactionTimer=setTimeout(()=>{reactionState='go';reactionStarted=performance.now();reactionButton.textContent='TAP NOW!';reactionButton.style.background='#16834e';reactionStatus.textContent='Go!';},1200+Math.random()*2800);}else if(reactionState==='waiting'){clearTimeout(reactionTimer);reactionState='done';reactionButton.textContent='Try again';reactionButton.style.background='var(--accent)';reactionStatus.textContent='Too early! Tap to try again.';}else if(reactionState==='go'){const ms=Math.round(performance.now()-reactionStarted);reactionState='done';reactionButton.textContent='Try again';reactionButton.style.background='var(--accent)';reactionStatus.textContent=`Your reaction time: ${ms} ms. Tap to play again.`;}});
+    const reactionButton=document.getElementById('reactionButton'),reactionStatus=document.getElementById('reactionStatus');let reactionState='idle',reactionTimer=null,reactionStart=0;
+    reactionButton.addEventListener('click',()=>{if(reactionState==='idle'||reactionState==='done'){clearTimeout(reactionTimer);reactionState='waiting';reactionButton.textContent='Wait for green…';reactionButton.style.background='#a64255';reactionStatus.textContent='Wait for it…';reactionTimer=setTimeout(()=>{reactionState='go';reactionStart=performance.now();reactionButton.textContent='TAP NOW!';reactionButton.style.background='#16834e';reactionStatus.textContent='Go!';},1200+Math.random()*2500);}else if(reactionState==='waiting'){clearTimeout(reactionTimer);reactionState='done';reactionButton.textContent='Try again';reactionButton.style.background='';reactionStatus.textContent='Too early! Tap to try again.';}else if(reactionState==='go'){const ms=Math.round(performance.now()-reactionStart);reactionState='done';reactionButton.textContent='Try again';reactionButton.style.background='';reactionStatus.textContent=`Reaction time: ${ms} ms. Tap to play again.`;}});
 
     // Number Guess
-    const guessForm=document.getElementById('guessForm');const guessInput=document.getElementById('guessInput');const guessStatus=document.getElementById('guessStatus');let answer,guessCount;
-    function resetGuess(){answer=Math.floor(Math.random()*100)+1;guessCount=0;guessInput.value='';guessInput.disabled=false;guessForm.querySelector('button[type="submit"]').disabled=false;guessStatus.textContent='Enter a number to begin.';}
-    guessForm.addEventListener('submit',event=>{event.preventDefault();const n=Number(guessInput.value);if(!Number.isInteger(n)||n<1||n>100){guessStatus.textContent='Choose a whole number from 1 to 100.';return;}guessCount++;if(n===answer){guessStatus.textContent=`Correct! You got it in ${guessCount} ${guessCount===1?'guess':'guesses'}.`;guessInput.disabled=true;guessForm.querySelector('button[type="submit"]').disabled=true;}else guessStatus.textContent=n<answer?'Too low — try a higher number.':'Too high — try a lower number.';guessInput.select();});
-    document.getElementById('guessReset').addEventListener('click',resetGuess);resetGuess();
+    const guessForm=document.getElementById('guessForm'),guessInput=document.getElementById('guessInput'),guessStatus=document.getElementById('guessStatus');let answer,guessCount;
+    function resetGuess(){answer=Math.floor(Math.random()*100)+1;guessCount=0;guessInput.value='';guessInput.disabled=false;guessForm.querySelector('[type=submit]').disabled=false;guessStatus.textContent='Enter a number to begin.';}
+    guessForm.addEventListener('submit',e=>{e.preventDefault();const n=Number(guessInput.value);if(!Number.isInteger(n)||n<1||n>100){guessStatus.textContent='Choose a whole number from 1 to 100.';return;}guessCount++;if(n===answer){guessStatus.textContent=`Correct! You got it in ${guessCount} ${guessCount===1?'guess':'guesses'}.`;guessInput.disabled=true;guessForm.querySelector('[type=submit]').disabled=true;}else guessStatus.textContent=n<answer?'Too low — try higher.':'Too high — try lower.';guessInput.select();});document.getElementById('guessReset').addEventListener('click',resetGuess);resetGuess();
+
+    // Tetris: keyboard and on-screen controls use the same game functions.
+    const tCanvas=document.getElementById('tetrisCanvas'),tCtx=tCanvas.getContext('2d'),tStatus=document.getElementById('tetrisStatus'),COLS=10,ROWS=20,SIZE=20;const shapes=[[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]];const colors=['#48d7ff','#f4d35e','#c084fc','#ff9f43','#5dd39e','#ff7185','#82aaff'];let grid=[],piece=null,tetrisTimer=null,tetrisScore=0,tetrisOn=false;
+    function spawnPiece(){const i=Math.floor(Math.random()*shapes.length);piece={shape:shapes[i].map(row=>row.slice()),color:colors[i],x:3,y:0};if(collides(piece.x,piece.y,piece.shape)){clearInterval(tetrisTimer);tetrisOn=false;tStatus.textContent=`Game over! Score: ${tetrisScore}. Tap Start to play again.`;}}
+    function collides(x,y,shape){for(let r=0;r<shape.length;r++)for(let c=0;c<shape[r].length;c++)if(shape[r][c]&&(x+c<0||x+c>=COLS||y+r>=ROWS||(y+r>=0&&grid[y+r][x+c])))return true;return false;}
+    function drawTetris(){tCtx.fillStyle='#080d12';tCtx.fillRect(0,0,tCanvas.width,tCanvas.height);for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){if(grid[r][c]){tCtx.fillStyle=grid[r][c];tCtx.fillRect(c*SIZE+1,r*SIZE+1,SIZE-2,SIZE-2);}}if(piece)for(let r=0;r<piece.shape.length;r++)for(let c=0;c<piece.shape[r].length;c++)if(piece.shape[r][c]){tCtx.fillStyle=piece.color;tCtx.fillRect((piece.x+c)*SIZE+1,(piece.y+r)*SIZE+1,SIZE-2,SIZE-2);} }
+    function lockPiece(){piece.shape.forEach((row,r)=>row.forEach((v,c)=>{if(v&&piece.y+r>=0)grid[piece.y+r][piece.x+c]=piece.color;}));let cleared=0;grid=grid.filter(row=>{if(row.every(Boolean)){cleared++;return false;}return true;});while(grid.length<ROWS)grid.unshift(Array(COLS).fill(0));if(cleared){tetrisScore+=cleared*100;tStatus.textContent=`Score: ${tetrisScore}`;}spawnPiece();drawTetris();}
+    function fall(){if(!tetrisOn||!piece)return;if(!collides(piece.x,piece.y+1,piece.shape)){piece.y++;drawTetris();}else lockPiece();}
+    function movePiece(action){if(!tetrisOn||!piece)return;if(action==='left'&&!collides(piece.x-1,piece.y,piece.shape))piece.x--;else if(action==='right'&&!collides(piece.x+1,piece.y,piece.shape))piece.x++;else if(action==='down'){fall();return;}else if(action==='drop'){while(!collides(piece.x,piece.y+1,piece.shape))piece.y++;lockPiece();return;}else if(action==='rotate'){const rotated=piece.shape[0].map((_,i)=>piece.shape.map(row=>row[i]).reverse());if(!collides(piece.x,piece.y,rotated))piece.shape=rotated;}drawTetris();}
+    function startTetris(){clearInterval(tetrisTimer);grid=Array.from({length:ROWS},()=>Array(COLS).fill(0));tetrisScore=0;tetrisOn=true;tStatus.textContent='Score: 0';spawnPiece();drawTetris();if(tetrisOn)tetrisTimer=setInterval(fall,550);}
+    document.getElementById('tetrisStart').addEventListener('click',startTetris);document.querySelectorAll('[data-tetris]').forEach(b=>b.addEventListener('click',()=>movePiece(b.dataset.tetris)));document.addEventListener('keydown',e=>{if(activePanel!=='tetris')return;const map={ArrowLeft:'left',ArrowRight:'right',ArrowDown:'down',ArrowUp:'rotate', ' ':'drop'};if(map[e.key]){e.preventDefault();movePiece(map[e.key]);}});drawTetris();
   </script>
 </body>
 </html>
